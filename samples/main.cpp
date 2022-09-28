@@ -33,15 +33,41 @@ int main()
   geo.segs=&mseg;
   geo.num_segs=1;
 
-  // generate meshlets
+  // generate hierachy meshlets
+  // set triangle count in one meshlet(group)
+  uint32_t triangle_size = 256;
+  // calculate group count for the whole mesh
+  uint32_t group_count = mseg.num_tris / 256;
+  // partition the whole mesh into groups
   meshlet_gen_cfg cfg;
-  cfg.max_mlet_tris=255;
-  cfg.max_mlet_vtx=64;
-  cfg.mlet_stripify=false;
+  cfg.max_mlet_tris = 256;
+  cfg.max_mlet_vtx = 256;
+  cfg.mlet_stripify = false;
   p3g_mesh_geometry res;
   generate_meshlets(cfg, geo, res);
   generate_bvols(geo, res);
   generate_vcones(geo, res, 1024, 1024);
+  while (group_count > 1)
+  {
+	  // partition all groups into clusters consisted with four groups
+	  
+	  // for each cluster
+	  // -- corse the cluster and reduce half count of triangles in it
+	  //    , keep the boundary edges constrained (not for the boundary of the whole mesh)
+
+	  // -- partition the corsed cluster into two group
+
+  }
+
+  //// generate meshlets
+  //meshlet_gen_cfg cfg;
+  //cfg.max_mlet_tris=255;
+  //cfg.max_mlet_vtx=64;
+  //cfg.mlet_stripify=false;
+  //p3g_mesh_geometry res;
+  //generate_meshlets(cfg, geo, res); 
+  //generate_bvols(geo, res);
+  //generate_vcones(geo, res, 1024, 1024);
 
   // output stats
   logf("number of meshlets: %i\r\n", res.mlets.size());
